@@ -3,11 +3,11 @@ services:
   bot:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./deployments/Dockerfile
     image: discordbot
     container_name: discordbot
     env_file:
       - .env
     volumes:
-      - ./database.sqlite:/app/database.sqlite
+      - ./db_dir:/app/db
     restart: unless-stopped
