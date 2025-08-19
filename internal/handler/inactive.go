@@ -69,7 +69,7 @@ func (c *InactiveCommand) Handle(s *discordgo.Session, i *discordgo.InteractionC
 
 	now := time.Now()
 	end := now.Add(time.Hour * 24 * time.Duration(days))
-	// end := now.Add(time.Second * time.Duration(days))
+
 	err := c.service.SaveRequest(user.ID, user.Username, reason, now, end)
 	if err != nil {
 		slog.Error("failed to save request", slog.String("error", err.Error()))

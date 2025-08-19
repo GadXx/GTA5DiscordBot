@@ -8,7 +8,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// SanctionCommand реализует команду /sanction
 type SanctionCommand struct {
 	service        *service.Service
 	roleSanctionID string

@@ -38,7 +38,7 @@ func (s *TrackingService) StartTracking() {
 }
 
 func (s *TrackingService) TrackIvent() {
-	ticker := time.NewTicker(time.Second * 10) // Проверка каждые 10 секунд
+	ticker := time.NewTicker(time.Hour)
 	defer ticker.Stop()
 	slog.Info("Starting tracking service")
 	for range ticker.C {

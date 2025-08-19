@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: discordbot
+    container_name: discordbot
+    env_file:
+      - .env
+    volumes:
+      - ./database.sqlite:/app/database.sqlite
+    restart: unless-stopped

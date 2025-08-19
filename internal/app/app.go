@@ -32,7 +32,7 @@ func NewApp() (*App, error) {
 		return nil, err
 	}
 	trackingService := service.NewTrackingService(repo, bot.Session, cfg.GuildID, cfg.RoleVacID, cfg.RoleSanctionID)
-	trackingService.StartTracking() // Запускаем трекинг
+	trackingService.StartTracking()
 	return &App{Bot: bot}, nil
 }
 

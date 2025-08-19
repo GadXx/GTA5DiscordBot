@@ -9,7 +9,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// InfoCommand реализует команду /info
 type InfoCommand struct {
 	service      *service.Service
 	roleLeaderID string
@@ -55,7 +54,6 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 		return
 	}
 
-	// Проверка прав
 	hasPermission := false
 	for _, roleID := range i.Member.Roles {
 		slog.Info("Role ID", slog.String("roleID", roleID))
@@ -72,7 +70,6 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 		return
 	}
 
-	// Проверка подкоманды
 	if len(i.ApplicationCommandData().Options) == 0 || i.ApplicationCommandData().Options[0].Name != "leave" {
 		_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -81,7 +78,6 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 		return
 	}
 
-	// Получение списка пользователей в отпуске
 	users, err := c.service.ListVacations()
 	if err != nil {
 		slog.Error("failed to list vacations", slog.String("error", err.Error()))
@@ -92,7 +88,6 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 		return
 	}
 
-	// Формирование ответа
 	if len(users) == 0 {
 		_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -104,7 +99,7 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 	var response strings.Builder
 	response.WriteString("**Пользователи в отпуске:**\n")
 	for _, user := range users {
-		duration := user.EndAt.Sub(user.CreatedAt).Hours() / 24 // Продолжительность в днях
+		duration := user.EndAt.Sub(user.CreatedAt).Hours() / 24
 		response.WriteString(fmt.Sprintf(
 			"- **%s**\n  Причина: %s\n  Начало: %s\n  Конец: %s\n  Длительность: %.0f дней\n",
 			user.UserName, user.Reason,
@@ -114,7 +109,6 @@ func (c *InfoCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreat
 		))
 	}
 
-	// Отправка ответа
 	_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{Content: response.String()},
